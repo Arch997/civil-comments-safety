@@ -24,10 +24,20 @@ def toxic_word_query():
     
     with col2:
         search_term = st.text_input("Search for a keyword: e.g. stupid, politics")
+    
+    with st.sidebar:
+        limit = st.number_input('Rows per page', min_value=10, max_value=5000, value=100, step=50)
+        page_number = st.number_input('Page number', min_value=1, value=1, step=1)
+
+    offset = (page_number - 1) * limit
 
     if search_term:
         toxic_query = pd.read_sql(
-            f"SELECT * FROM {table_name} WHERE text ILIKE '%%{search_term}%%' LIMIT 50",
+            f"""SELECT * FROM {table_name} WHERE text ILIKE 
+                '%%{search_term}%%' 
+                ORDER BY toxicity, severe_toxicity DESC
+                LIMIT {limit} OFFSET {offset}
+            """,
             db_url
         )
 
