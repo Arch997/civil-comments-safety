@@ -7,7 +7,7 @@ def toxic_word_query():
 
     load_dotenv()
 
-    db_url = os.getenv('DB_URL')
+    db_url = os.getenv('NEON_DB_URL')
 
     st.title("Word Safety Data Audit")
 
